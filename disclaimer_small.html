@@ -1,0 +1,46 @@
+<html>
+<title>
+State of the Nation
+</title>
+
+<center><h3>State of the Nation</h3><br></center>
+
+For technical reasons the date the query was last run can be found at the bottom
+of this page. <br>
+I only list the results that are publicly available, either through the bdii,
+using uberftp or via the UK Nagios.
+For some EMI services it's not obvious what to use as the version. I use the
+following: <br>
+<b>ARC-CE:</b> I have not yet figured out if ARC-CES actually advertise their version. <br> 
+<b>CREAM-CE:</b> GlueCEImplementationVersion <br>
+<b>WN:</b>  Nagios tests (only available for CREAMCEs) <br>
+<b>SE:</b> GlueSEImplementationVersion <br>
+<b>site bdii:</b>GLUE2EndpointImplementationVersion<br>
+<b>WMS:</b> GLUE2EndpointImplementationVersion <br>
+<b>LB:</b> GLUE2EndpointImplementationVersion &amp; MiddlewareVersion<br>
+<b>BDII (top):</b> MiddlewareVersion <br>
+<br>
+This page is generated using a 
+<a href="public_logs/emi_deployment/query_sl6.py">python script</a> querying the 
+site bdiis and using the results of the Nagios tests (only available for CREAMCEs) for the WN version. <br>
+EMI 2 CREAMCEs/WNs/BDIIs(*) are now marked in <font color = #FF0000> red</font>. <br>
+(*) It's not always obvious which version go with EMI2. <br>
+
+<br> 
+The operating system on the CREAM-CEs is determined using uberftp. 
+If it's missing, it means I could not access the CE with uberftp and a dteam proxy.
+There is no way to determine the operating system on ARC-CEs.
+<br>
+Note that the script checks everything you advertise in your bdii - if you see something in this table that shouldn't be there, please check your bdii. (Please don't advertise services that don't work and aren't likely to work in a while.)
+<br><br>
+<body bgcolor="#FFFFFF">
+
+<table border="1">
+
+<tr>
+<td><b>Site</b></td> 
+<td bgcolor=#CCFFCC><b>CREAM CE</b> </td> 
+<td><b>SE</b></td> 
+<td bgcolor=#CCFFCC><b>BDII(site)</b></td> 
+<td><b>WN</b></td>
+</tr>
