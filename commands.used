@@ -1,0 +1,20 @@
+# how to check in a file
+git add query_bdii_all_sites.py
+git commit -m "initial commit"
+git push -u origin master
+
+# check status ... indeed...
+git status 
+
+# just do this once
+touch README.md
+git config --global user.name "Daniela Bauer"
+git config --global user.email "daniela.bauer.grid@googlemail.com"
+git init
+add README.md
+git commit -m "first commit"
+
+# lx04 is special
+git remote add origin https://marianne013@github.com/marianne013/grid.git
+git push -u origin master
+
