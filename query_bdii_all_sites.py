@@ -41,7 +41,7 @@ def bdii_name(sitename):
     bdiis['UKI-LT2-UCL-HEP'] = 'lcg-bdii01.hep.ucl.ac.uk'
     # Southgrid
     bdiis['UKI-SOUTHGRID-BHAM-HEP'] = 'epgr09.ph.bham.ac.uk'
-    bdiis['UKI-SOUTHGRID-BRIS-HEP'] = 'lcgbdii.phy.bris.ac.uk'
+    bdiis['UKI-SOUTHGRID-BRIS-HEP'] = 'lcgbdii02.phy.bris.ac.uk'
     bdiis['UKI-SOUTHGRID-RALPP'] = 'site-bdii.pp.rl.ac.uk'
     bdiis['UKI-SOUTHGRID-OX-HEP'] = 't2bdii06.physics.ox.ac.uk'
     bdiis['UKI-SOUTHGRID-CAM-HEP'] = 'vserv08.hep.phy.cam.ac.uk'
@@ -126,6 +126,18 @@ def get_middleware_version(sitename, gridnode):
         # this is basically RAL-LCG2
         mw_ver.extend(['Middleware: N/A'])
     # print len(mw_ver)   
+    # make sure Simon hasn't put any Christmas messages in the bdii
+    # check if the CE name only contains letters, numbers and dots to avoid 'bdii hacks'                                          
+    allowed = set(string.ascii_letters + string.digits + '.' + '-' + '=' + ':' + '/' + string.whitespace)
+    # check if set is a subset of allowed characters
+    if set(mw_ver[0]) <= allowed:
+        # don't do anything                                                                                                       
+        pass
+    else:
+        print 'dodgy characters in Middleware version: '+mw_ver[0]+' ! Exiting program'
+        sys.exit(1)
+    # end of paranoia test     
+
     return mw_ver[0]
 
 
@@ -256,7 +268,18 @@ def write_bdii_info(bdii_ldapresults, sitename, outfile):
     """Fills bdii column in any given row"""
     # find the bdiis name in glue output
     found = str(bdii_ldapresults[0][0]).find('_')
-    bdiinodename = str(bdii_ldapresults[0][0][16:found]) 
+    bdiinodename = str(bdii_ldapresults[0][0][16:found])
+    # apply the paranoia test
+    allowed = set(string.ascii_lowercase + string.digits + '.' + '-')
+    # check if set is a subset of allowed characters                                                                              
+    if set(bdiinodename) <= allowed:
+        # don't do anything                                                                                                       
+        pass
+    else:
+        print 'dodgy characters in BDII name: '+bdiinodename+' ! Exiting program'
+        sys.exit(1)
+   # end of paranoia test
+
     emi2test = False
     emiversion = get_middleware_version(sitename, bdiinodename)
     emi2test = 'MiddlewareVersion=2.' in str(emiversion)             
