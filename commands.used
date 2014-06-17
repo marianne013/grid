@@ -15,6 +15,7 @@ add README.md
 git commit -m "first commit"
 
 # lx04 is special
+git remote rm origin
 git remote add origin https://marianne013@github.com/marianne013/grid.git
 git push -u origin master
 
