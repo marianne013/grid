@@ -45,7 +45,7 @@ def bdii_name(sitename):
     bdiis['UKI-SOUTHGRID-RALPP'] = 'site-bdii.pp.rl.ac.uk'
     bdiis['UKI-SOUTHGRID-OX-HEP'] = 't2bdii06.physics.ox.ac.uk'
     bdiis['UKI-SOUTHGRID-CAM-HEP'] = 'vserv08.hep.phy.cam.ac.uk'
-    bdiis['UKI-SOUTHGRID-SUSX'] = 'grid-bdii.hpc.susx.ac.uk'
+    bdiis['UKI-SOUTHGRID-SUSX'] = 'grid-bdii-02.hpc.susx.ac.uk'
     bdiis['EFDA-JET'] = 'grid005.jet.efda.org'
     # Northgrid
     bdiis['UKI-NORTHGRID-SHEF-HEP'] = 'lcg.shef.ac.uk'
