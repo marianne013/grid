@@ -24,7 +24,9 @@ import urllib
 # note port when querying an arc ce directly:
 # ldapsearch -LLL -x -H ldap://cetest01.grid.hep.ph.ic.ac.uk:2135 -b o=glue
 
+##########    constants     ####################
 
+# URL of WN version mapping file
 WN_VERS_URL = "http://lt2admin.grid.hep.ph.ic.ac.uk/sitemon/versions.txt"
 
 ########## helper functions ####################
