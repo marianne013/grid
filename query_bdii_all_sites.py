@@ -8,12 +8,11 @@ import string
 import re
 import datetime
 import csv
+import urllib
 
 
 # this requires a UI and a valid dteam or ops proxy
 # as the name alludes, this is for SL6
-
-# wget http://lt2admin.grid.hep.ph.ic.ac.uk/sitemon/versions.txt
 
 # needs 'disclaimer_small.html' to work out of the box:
 # http://www.hep.ph.ic.ac.uk/~dbauer/grid/public_logs/emi_deployment/disclaimer_small.html
@@ -25,6 +24,8 @@ import csv
 # note port when querying an arc ce directly:
 # ldapsearch -LLL -x -H ldap://cetest01.grid.hep.ph.ic.ac.uk:2135 -b o=glue
 
+
+WN_VERS_URL = "http://lt2admin.grid.hep.ph.ic.ac.uk/sitemon/versions.txt"
 
 ########## helper functions ####################
 
@@ -376,10 +377,11 @@ def main():
     os.system("rm -rf ce.tmp")
 
 
-    # read in WNs from file
+    # read in WNs from URL
     # CE names are dictionary keys
-    with open('versions.txt', 'rb') as handle:
-        wns = dict(csv.reader(handle))
+    ver_file = urllib.urlopen(WN_VERS_URL)
+    wns = dict(csv.reader(ver_file))
+    ver_file.close()
 
     # London, Southgrid, Northgrid, Scotgrid, Tier 1    
     uksites = [ 'UKI-LT2-IC-HEP', 'UKI-LT2-Brunel', 'UKI-LT2-RHUL',
