@@ -11,7 +11,7 @@ I only list the results that are publicly available, either through the bdii,
 using uberftp or via the UK Nagios.
 For some EMI services it's not obvious what to use as the version. I use the
 following: <br>
-<b>ARC-CE:</b> I have not yet figured out if ARC-CES actually advertise their version. <br> 
+<b>ARC-CE:</b> nordugrid-arc version (no middleware version available) <br> 
 <b>CREAM-CE:</b> GlueCEImplementationVersion <br>
 <b>WN:</b>  Nagios tests (only available for CREAMCEs) <br>
 <b>SE:</b> GlueSEImplementationVersion <br>
@@ -21,7 +21,7 @@ following: <br>
 <b>BDII (top):</b> MiddlewareVersion <br>
 <br>
 This page is generated using a 
-<a href="public_logs/emi_deployment/query_sl6.py">python script</a> querying the 
+<a href="https://github.com/marianne013/grid/blob/master/query_bdii_all_sites.py">python script</a> querying the 
 site bdiis and using the results of the Nagios tests (only available for CREAMCEs) for the WN version. <br>
 EMI 2 CREAMCEs/WNs/BDIIs(*) are now marked in <font color = #FF0000> red</font>. <br>
 (*) It's not always obvious which version go with EMI2. <br>
