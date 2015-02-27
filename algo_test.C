@@ -179,7 +179,7 @@ void algo_test() {
   TVector3 point_two(2.0, 1.0, 1.0);
   TVector3 point_three(1.5, 1.5, 1.0);
   TVector3 point_four(1.5, 1.0, 1.0);
-  
+  TVector3 point_five(3.0, 1.7, 1.0);
   // thanks to Wolfram Alpha
   // line is x1, x2, point is x0
   // x = cross prduct
@@ -191,6 +191,10 @@ void algo_test() {
   Float_t d2 =  ((point_two - point_one).Cross(point_one - point_four)).Mag() /
       (point_two - point_one).Mag();
   cout << "d2: " << d2 << endl;
+  Float_t d3 =  ((point_two - point_one).Cross(point_one - point_five)).Mag() /
+    (point_two - point_one).Mag();
+  cout << "d3: " << d3 << endl;
+
 
 }
 
