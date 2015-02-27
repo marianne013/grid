@@ -173,6 +173,25 @@ void algo_test() {
   TVector3 av = vertex_ave(test_ave);
   cout << "vertex_ave test: " <<  av.X() << " " << av.Y() << " " << av.Z() << endl; 
 
+
+  // Line defined by two points - how far is the third point away ?
+  TVector3 point_one(1.0, 1.0, 1.0);
+  TVector3 point_two(2.0, 1.0, 1.0);
+  TVector3 point_three(1.5, 1.5, 1.0);
+  TVector3 point_four(1.5, 1.0, 1.0);
+  
+  // thanks to Wolfram Alpha
+  // line is x1, x2, point is x0
+  // x = cross prduct
+  // d = |(x2 - x1) x (x1 - x0)| / | x2-x1 |
+
+  Float_t d1 =  ((point_two - point_one).Cross(point_one - point_three)).Mag() /
+    (point_two - point_one).Mag();
+  cout << "d1: " << d1 << endl;
+  Float_t d2 =  ((point_two - point_one).Cross(point_one - point_four)).Mag() /
+      (point_two - point_one).Mag();
+  cout << "d2: " << d2 << endl;
+
 }
 
 
