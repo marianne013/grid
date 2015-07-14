@@ -1,4 +1,5 @@
 # how to check in a file
+git clone https://marianne013@github.com/marianne013/grid
 git add query_bdii_all_sites.py
 git commit -m "initial commit"
 git push -u origin master
