@@ -106,28 +106,40 @@ def get_list_of_ces(ce_ldapresult):
 # and now for some glue2
 def get_middleware_version(sitename, gridnode):
     """tries to extract middleware version as advertised by the grid node"""
-    print 'get_middleware_version: '+gridnode+ ' at '+sitename
+    # print 'get_middleware_version: '+gridnode+ ' at '+sitename
     mds2 = 'o=glue'
     sbdii = "ldap://"+bdii_name(sitename)+':2170'
     l2 = ldap.initialize(sbdii)
+    # "is ldap working at this site" cross check
+    try:
+      l2.simple_bind_s()   
+    except ldap.TIMEOUT:
+      print 'ldap timeout problem'
+
+    l2.timeout = 20
     magicendpoint = "(GLUE2EndpointID=*"+gridnode+"*)"
     glue2test = [] # list
     mw_ver = []
     # example: glue2test=l2.search_s(mds2, ldap.SCOPE_SUBTREE, '(GLUE2EndpointID=*dc2-grid*)')
-    glue2test = l2.search_s(mds2, ldap.SCOPE_SUBTREE, magicendpoint)
+    try:
+      glue2test = l2.search_s(mds2, ldap.SCOPE_SUBTREE, magicendpoint)
+    except ldap.TIMEOUT:
+      print 'ldap timeout problem'
+
     if len(glue2test) > 0:
-        if 'GLUE2EntityOtherInfo' in glue2test[0][1]:
-            # that's apparently a list comprehension
-            mw_ver = [x for x in glue2test[0][1]['GLUE2EntityOtherInfo'] if x.startswith('MiddlewareVersion=')]
-            # Append a default entry, in-case the above filter finds nothing...
-            mw_ver.append('Stealth middleware version') # Here I don't need brackets...
-            # print 'And now for something completely different: '
-            # print '%s' % mw_ver[0]
-        else:
-            mw_ver.extend(['Stealth middleware version']) # I need those brackets, otherwise I end up with chars
+
+      if 'GLUE2EntityOtherInfo' in glue2test[0][1]:
+        # that's apparently a list comprehension
+        mw_ver = [x for x in glue2test[0][1]['GLUE2EntityOtherInfo'] if x.startswith('MiddlewareVersion=')]
+        # Append a default entry, in-case the above filter finds nothing...
+        mw_ver.append('Stealth middleware version') # Here I don't need brackets...
+        # print 'And now for something completely different: '
+        # print '%s' % mw_ver[0]
+      else:
+        mw_ver.extend(['Stealth middleware version']) # I need those brackets, otherwise I end up with chars
     else:
-        # this is basically RAL-LCG2
-        mw_ver.extend(['Middleware: N/A'])
+      # this is basically RAL-LCG2
+      mw_ver.extend(['Middleware: N/A'])
     # print len(mw_ver)   
     # make sure Simon hasn't put any Christmas messages in the bdii
     # check if the CE name only contains letters, numbers and dots to avoid 'bdii hacks'                                          
@@ -183,6 +195,7 @@ def write_ce_info(ce_ldapresult, sitename, outfile):
                         # outfile.write('Could not determine CE operating system. <br> <br>')
                         outfile.write('<br><br>')
                     else:
+                        # print str(ceop)
                         outfile.write(str(ceop) + ' <br> <br>') 
                         ftmp.close()
                 else:
@@ -316,6 +329,13 @@ def write_site_info(sitename, wns, outfile):
 
     # --- SE ---
     se_ldapresult = []
+    # does the bdii talk to me at all ?
+    l.timeout = 20 # just in case it doesn't
+    try:
+      l.simple_bind_s()
+    except ldap.TIMEOUT:
+      print 'ldap timeout problem'
+
     try:
         se_ldapresult = l.search_s( mds, ldap.SCOPE_SUBTREE, '(GlueSEUniqueID=*)')
     except ldap.SERVER_DOWN:   
@@ -323,6 +343,8 @@ def write_site_info(sitename, wns, outfile):
         pass
     except ldap.NO_SUCH_OBJECT:
         print 'no SE found at ' +sitename
+    except ldap.TIMEOUT:
+        print 'ldap timeout problem'   
     except ldap.OTHER:
         print 'I give up at '+sitename
 
@@ -342,9 +364,13 @@ def write_site_info(sitename, wns, outfile):
         outfile.write('<font color="#FF0000">'+bdii_name(sitename)+': <br> Cannot determine version (probably glite)</font>')
     except ldap.NO_SUCH_OBJECT:
         outfile.write('no information in site bdii')
+    except ldap.TIMEOUT:
+        outfile.write('ldap timeout error')
     except ldap.OTHER:
         outfile.write('unsepcified ldap error')
-   
+        
+
+
     outfile.write('</td>')
 
     # --- WN ---
@@ -389,9 +415,10 @@ def main():
     uksites = [ 'UKI-LT2-IC-HEP', 'UKI-LT2-Brunel', 'UKI-LT2-RHUL',
                 'UKI-LT2-QMUL', 'UKI-LT2-UCL-HEP', 'UKI-SOUTHGRID-BHAM-HEP',
                 'UKI-SOUTHGRID-BRIS-HEP', 'UKI-SOUTHGRID-RALPP', 'UKI-SOUTHGRID-OX-HEP',
-                'UKI-SOUTHGRID-CAM-HEP', 'UKI-SOUTHGRID-SUSX', 'EFDA-JET', 'UKI-NORTHGRID-SHEF-HEP', 
+                'UKI-SOUTHGRID-CAM-HEP', 'EFDA-JET', 'UKI-NORTHGRID-SHEF-HEP', 
                 'UKI-NORTHGRID-LANCS-HEP', 'UKI-NORTHGRID-LIV-HEP', 'UKI-NORTHGRID-MAN-HEP', 
                 'UKI-SCOTGRID-DURHAM','UKI-SCOTGRID-ECDF', 'UKI-SCOTGRID-GLASGOW', 'RAL-LCG2']
+
         
     # now what I really want is to write this to an html file
     # read in a standard disclaimer and copy it to a new file
@@ -441,18 +468,21 @@ def main():
         f.write('</td><td>')
         # topbdii
         topresult = lq.search_s(mds, ldap.SCOPE_SUBTREE, '(GLUE2EndpointInterfaceName=bdii_top)')
-        found = str(topresult[0][0]).find('_')
-        topbdiiname = str(topresult[0][0][16:found])
+        if len(topresult) > 0:
+          found = str(topresult[0][0]).find('_')
+          topbdiiname = str(topresult[0][0][16:found])
         # print '%s' %topbdiiname
-        emiversion = get_middleware_version(site,  topbdiiname)
-        emi2test = 'MiddlewareVersion=2.' in str(emiversion)
-        if emi2test == True:
+          emiversion = get_middleware_version(site,  topbdiiname)
+          emi2test = 'MiddlewareVersion=2.' in str(emiversion)
+          if emi2test == True:
             f.write('<font color=#FF000>')
-        f.write(topbdiiname+': ')
-        f.write('<br>')
-        f.write(emiversion) 
-        if emi2test == True:
+          f.write(topbdiiname+': ')
+          f.write('<br>')
+          f.write(emiversion) 
+          if emi2test == True:
             f.write('</font>')
+        else:
+          f.write('Topbdii:N/A')
         f.write('</td><td bgcolor=#CCFFCC>')
         # LFC
         lfcres = lq.search_s(mds, ldap.SCOPE_SUBTREE,'(GLUE2EndpointImplementationName=LFC)')
