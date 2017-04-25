@@ -1,1 +1,9 @@
-assorted scripts for dealing with the grid and general location to dump all odds and ends
+mainly what is says on the tin...
+
+git clone git@github.com:marianne013/python
+
+git add afile.py
+
+git commit -m "a comment"
+
+git push -u origin master
