@@ -87,8 +87,9 @@ def write_groups_yaml(voname, pfile):
     base_name = get_base_name(voname)
     user = base_name + "001"
     user_gid = pwd.getpwnam(user).pw_gid
-    sgm = base_name + "sgm"
-    sgm_gid = pwd.getpwnam(sgm).pw_gid
+    # sgm_gid is the same as user_gid
+    # sgm = base_name + "sgm"
+    # sgm_gid = pwd.getpwnam(sgm).pw_gid
     if voname in VOS_WITH_PILOT_ROLES:
         pilot = base_name + "plt001"
         pilot_gid = pwd.getpwnam(pilot).pw_gid
@@ -97,15 +98,11 @@ def write_groups_yaml(voname, pfile):
         prod_gid = pwd.getpwnam(prod).pw_gid
 
     pfile.write('    {} {} {}\n'.format('groups', ':', '{'))
-    pfile.write('      {} {}{}{}{}{}\n'.format(base_name,
-                                               ': { fqan : ["/',
-                                               voname, '"], gid : ', user_gid,
-                                               ' },'))
-    pfile.write('      {} {}{}{}{}{}\n'.format(base_name+"sgm",
-                                               ': { fqan : ["/',
-                                               voname,
-                                               '/Role=lcgadmin"], gid : ',
-                                               sgm_gid, ' },'))
+    # we use the same group for user and sgm
+    pfile.write('      {} {}{}{}{}{}{}{}\n'.format(base_name,
+                                                   ': { fqan : ["/', voname,
+                                                   '", "/', voname, '/Role=lcgadmin"], gid : ', user_gid,
+                                                   ' },'))
     if voname in VOS_WITH_PILOT_ROLES:
         pfile.write('      {} {}{}{}{}{}\n'.format(base_name+"plt",
                                                    ': { fqan : ["/',
@@ -159,7 +156,7 @@ def write_yaml_snippet(vo_name, cream_ce, pfile):
         pfile.write('          {} {} {}{}\n'.format(user_name, ':',
                                                     user_uid, ','))
     pfile.write('        },  # end of users_table\n')
-    pfile.write('        {}{}{}'.format('fqan : ["/', vo_name, '"],\n'))
+    pfile.write('        {}{}{}'.format('primary_fqan : ["/', vo_name, '"],\n'))
     pfile.write('      },  # end of plain users\n')
 
 
@@ -174,7 +171,7 @@ def write_yaml_snippet(vo_name, cream_ce, pfile):
             pfile.write('          {} {} {}{}\n'.format(user_name, ':',
                                                         user_uid, ','))
         pfile.write('        },  # end of users_table\n')
-        pfile.write('        {}{}{}'.format('fqan : ["/', vo_name,
+        pfile.write('        {}{}{}'.format('primary_fqan : ["/', vo_name,
                                             '/Role=pilot"],\n'))
         pfile.write('      },  # end of pilot users\n')
     # production users
@@ -188,7 +185,7 @@ def write_yaml_snippet(vo_name, cream_ce, pfile):
             pfile.write('          {} {} {}{}\n'.format(user_name, ':',
                                                         user_uid, ','))
         pfile.write('        },  # end of users_table\n')
-        pfile.write('        {}{}{}\n'.format('fqan : ["/', vo_name,
+        pfile.write('        {}{}{}\n'.format('primary_fqan : ["/', vo_name,
                                               '/Role=production"],'))
         pfile.write('      },   # end of production users\n')
 
