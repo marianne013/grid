@@ -64,7 +64,7 @@ def get_voms_servers(voname):
                        '/DC=ch/DC=cern/OU=computers/CN=voms2.cern.ch',
                        '/DC=ch/DC=cern/CN=CERN Grid Certification Authority')
     cern2 = VomsServer('lcg-voms2.cern.ch',
-                       '/DC=ch/DC=cern/OU=computers/CN=lcg-voms2.cern.ch lhcb',
+                       '/DC=ch/DC=cern/OU=computers/CN=lcg-voms2.cern.ch',
                        '/DC=ch/DC=cern/CN=CERN Grid Certification Authority')
     fnal1 = VomsServer('voms1.fnal.gov',
                        '/DC=org/DC=opensciencegrid/O=Open Science Grid/OU=Services/CN=voms1.fnal.gov',
