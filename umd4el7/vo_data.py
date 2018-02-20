@@ -78,9 +78,9 @@ def get_voms_servers(voname):
     france = VomsServer('cclcgvomsli01.in2p3.fr',
                         '/O=GRID-FR/C=FR/O=CNRS/OU=CC-IN2P3/CN=cclcgvomsli01.in2p3.fr',
                         '/C=FR/O=CNRS/CN=GRID2-FR')
-    greece1 = VomsServer('voms.hellasgrid.gr',
-                         '/C=GR/O=HellasGrid/OU=hellasgrid.gr/CN=voms.hellasgrid.gr',
-                         '/C=GR/O=HellasGrid/OU=Certification Authorities/CN=HellasGrid CA 2016')
+#    greece1 = VomsServer('voms.hellasgrid.gr',
+#                         '/C=GR/O=HellasGrid/OU=hellasgrid.gr/CN=voms.hellasgrid.gr',
+#                         '/C=GR/O=HellasGrid/OU=Certification Authorities/CN=HellasGrid CA 2016')
     greece2 =  VomsServer('voms2.hellasgrid.gr',
                           '/C=GR/O=HellasGrid/OU=hellasgrid.gr/CN=voms2.hellasgrid.gr',
                           '/C=GR/O=HellasGrid/OU=Certification Authorities/CN=HellasGrid CA 2016')
@@ -94,11 +94,11 @@ def get_voms_servers(voname):
     elif voname in ['dune', 'lsst']:
         vomsservers = [fnal1, fnal2]
     elif voname in ['calice', 'ilc']:
-         vomsservers = [desy]
+        vomsservers = [desy]
     elif voname == 'biomed':
-        vomsserver = [france]
+        vomsservers = [france]
     elif voname == 'dteam':
-        vomsserver = ['greece1', 'greece2']
+        vomsservers = [greece2]
     else:
         print "ERROR: Cannot find any vomsserver for VO %s" %voname
     
