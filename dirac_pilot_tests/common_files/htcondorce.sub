@@ -1,0 +1,19 @@
+# Required for local HTCondor-CE submission
+universe = vanilla
+use_x509userproxy = true
++Owner = undefined
+
+# Files
+executable = pilot_test.sh
+output = job.log
+error = job.err
+log = ce_test.log
+
+delegate_job_GSI_credentials_lifetime = 0
+
+# File transfer behavior
+ShouldTransferFiles = YES
+WhenToTransferOutput = ON_EXIT
+
+# Run job once
+queue

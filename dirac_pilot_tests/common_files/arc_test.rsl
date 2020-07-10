@@ -1,0 +1,6 @@
+&( runTimeEnvironment = "ENV/PROXY" )
+( executable = "pilot_test.sh" )
+( stdout = "logfile" )
+( stderr = "logfile" )
+( inputfiles = ( "pilot_test.sh" "" ) )
+( outputfiles = ( "logfile" "" ) ("environment.txt" ""))

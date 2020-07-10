@@ -1,0 +1,8 @@
+Scripts and auxilliary files I use to test pilot submission to new sites/CEs outside DIRAC.
+For debugging.
+Required cvmfs and valid pilot cert.
+Not every script works for every site, these are just examples.
+uki-lt2-ic-hep: htcondor
+uki-lt2-qmul: arc
+
+ 
